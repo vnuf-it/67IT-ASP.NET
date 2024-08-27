@@ -14,7 +14,7 @@ namespace BT1
         double balance;    // Số dư tài khoản
 
         //Properties
-        public string Code { get => code; set => code = value; }
+        public string Code { get => this.code; set => this.code = value; }
         public string Account
         {
             get { return this.account; }
@@ -25,12 +25,12 @@ namespace BT1
         //Methods
         public Accouting()
         {
-            Code = "";
-            Account = "";
+            Code = "Ex: VCB, TCB, MBB, VTB...";
+            Account = " MA TAI KHOAN";
             Balance = 0;
         }
 
-        public Accouting(string code, string account, float balance)
+        public Accouting(string code, string account, double balance)
         {
             Code = code;
             Account = account;
@@ -49,6 +49,7 @@ namespace BT1
                 $"\n So du tai khoan: {Balance}");
         }
 
+        // Cach 1: Gui/Rut Tien
         public double GuiTien(double tien_gui)
         {
             // Trả về số dư tài khoản
@@ -61,6 +62,22 @@ namespace BT1
             // Trả về số dư tài khoản
             Balance = Balance - tien_rut;
             return Balance;
+        }
+
+        // Cach 2: Gui/Rut Tien
+        /// <summary>
+        /// Gui/Rut Tien
+        /// </summary>
+        /// <param name="x">true: gui tien | false: rut tien</param>
+        /// <param name="so_tien">so tien gui / rut</param>
+        public void GuiRutTien(bool x, double so_tien)
+        {
+            //x = true => GuiTien
+            //x = false => RutTien
+            if (x = true)
+                Balance += so_tien;
+            else
+                Balance -= so_tien;
         }
 
         public double SoDuKhaDung()

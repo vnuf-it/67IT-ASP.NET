@@ -30,9 +30,48 @@ namespace BT1
             dstaikhoan.Add(tk);
         }
 
+        // Cach 1:
+        //public Double TongSoDu()
+        //{
+        //    return dstaikhoan.Sum(obj => obj.Balance);
+        //}
+
+        // 
         public Double TongSoDu()
         {
-            return dstaikhoan.Sum(obj => obj.Balance);
+            Double total = 0;
+            foreach (var tk in dstaikhoan)
+            {
+                if (tk.Balance == null)
+                {
+                    throw new ArgumentNullException();
+                }
+                else
+                {
+                    total += tk.Balance;
+                }
+            }
+            //Console.WriteLine($"\n Tong So Du (cac tai khoan): {total}");
+            return total;
         }
+
+        // Cach 3:
+        public void TongSoDu(params Double[] args)
+        {
+            Double total = 0;
+            foreach (var so_du in args)
+            {
+                if (so_du == null)
+                {
+                    throw new ArgumentNullException();
+                }
+                else
+                {
+                    total += so_du;
+                }
+            }
+            Console.WriteLine($"\n Tong So Du (cac tai khoan): {total}");
+        }
+
     }
 }
