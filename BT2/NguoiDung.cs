@@ -38,6 +38,12 @@ namespace BT2
             Tuoi = 0;
         }
 
+        public NguoiDung(string hodem, string ten)
+        {
+            Hodem = hodem;
+            Ten = ten;
+        }
+
         public NguoiDung(string cccd, string hodem, string ten, int tuoi)
         {
             Cccd = cccd;
