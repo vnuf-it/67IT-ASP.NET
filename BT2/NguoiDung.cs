@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BT2
@@ -20,9 +21,40 @@ namespace BT2
         public string Hodem { get => hodem; set => hodem = value; }
         public string Ten { get => ten; set => ten = value; }
         public string Nickname { get => nickname; set => nickname = value; }
-        public string Email { get => email; set => email = value; }
+        public string Email
+        {
+            get => email;
+            set
+            {
+                //// Way 1:
+                //Regex validateEmailRegex = new Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+                //var check = validateEmailRegex.IsMatch(value);
+                //if (check) 
+                //    email = value;
+                //else
+                //    Console.WriteLine("Nhap email khong chinh xac. Vui long nhap lai !!");
+
+                // Way 2:
+                if (Regex.IsMatch(value, "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"))
+                    email = value;
+                else
+                    Console.WriteLine("Nhap email khong chinh xac. Vui long nhap lai !!");
+
+            }
+        }
         public string Phone { get => phone; set => phone = value; }
-        public int Tuoi { get => tuoi; set => tuoi = value; }
+
+        public int Tuoi
+        {
+            get => tuoi;
+            set
+            {
+                if (value > 0)
+                    tuoi = value;
+                else
+                    Console.WriteLine("Nhap tuoi khong chinh xac. Vui long nhap lai !!");
+            }
+        }
 
         /// <summary>
         /// Ham khoi tao Nguoi dung
@@ -68,7 +100,7 @@ namespace BT2
         /// </summary>
         public virtual void InThongTin()
         {
-            var str_in = 
+            var str_in =
                 $"\nHo va ten: {Hodem} {Ten}" +
                 $"\nSo CCCD: {Cccd}" +
                 $"\nNick name: {Nickname}";

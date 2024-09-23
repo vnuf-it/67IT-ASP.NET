@@ -18,6 +18,11 @@ namespace WebMVC.Controllers
             return View();
         }
 
+        public IActionResult GioiThieu()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

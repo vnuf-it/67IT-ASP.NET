@@ -1,3 +1,5 @@
+using Microsoft.Extensions.FileProviders;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +17,34 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), @"Statics")),
+    RequestPath = new PathString("/statics")
+});
+
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), @"Statics")),
+    RequestPath = new PathString("/statics")
+});
+
+//app.UseStaticFiles(new StaticFileOptions()
+//{
+//    FileProvider = new PhysicalFileProvider(
+//            Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\assets")),
+//    RequestPath = new PathString("/assets")
+//});
+
+//app.UseDirectoryBrowser(new DirectoryBrowserOptions()
+//{
+//    FileProvider = new PhysicalFileProvider(
+//        Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images")),
+//    RequestPath = new PathString("/MyImages")
+//});
 
 app.UseRouting();
 

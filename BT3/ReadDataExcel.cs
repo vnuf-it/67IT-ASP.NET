@@ -56,9 +56,9 @@ namespace BT3
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            var fileInfo = new FileInfo(filePath);
+            var file_excel = new FileInfo(filePath);
 
-            using (var package = new ExcelPackage(fileInfo))
+            using (var package = new ExcelPackage(file_excel))
             {
                 var worksheet = package.Workbook.Worksheets[0]; // Get the first worksheet
                 var rowCount = worksheet.Dimension.Rows;

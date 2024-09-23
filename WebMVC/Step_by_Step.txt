@@ -1,0 +1,53 @@
+﻿B1: Tải về static web (HTML + CSS + JS)
+B2: Tạo project WebMVC (ASP.NET)
+B3: Tạo thư mục Statics: để lưu trữ tất cả các tệp static của web
+B4: Copy nguyên thư mục camping vào thư mục Statics
+
+
+B5: Vào thư mục View/Shared
+- Tạo mới một tệp view Razor để làm bố cục mặc định thay thế cho _Layout.cshtml
+- Đặt tên view Razor mới là _Base.cshtml
+
+B6: Tạo 1 đoạn HTML5 cơ bản cho view _Base
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trang Base</title>
+</head>
+<body>
+    <h1>Đây là tiêu đề</h1>
+    <p>Đây là các đoạn nội dung</p>
+     @RenderBody()
+</body>
+</html>
+
+B7: Vào tệp _ViewStart.cshtml
+- Chỉnh sửa thay đổi _Layout => _Base
+- Run chương trình để Test thay đổi sử dụng Layout _Base thành công.
+
+B8: Sao chép toàn bộ source HTML ở caming/index.html vào _Base.cshtml
+B9: Giữ lại phàn source HTML dùng chung để tạo bố cục chuẩn cho Layout
+Ex: Giữ lại các tag <header> và <footer>
+
+Lưu ý: Khi chưa cấu hình thiết lập staticfile chuẩn cho thư viện mới thì giao diện bị lỗi hiển thi CSS, JS (404)
+
+B10: Vào file Program
+- Bổ sung cấu hình MidderWare UseStaticFile() và thêm tùy chỉnh thư mục static cho theme
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), @"Statics")),
+    RequestPath = new PathString("/statics")
+});
+
+B11: Thay thế đường dẫn mới để path đến các tệp static file chuẩn
+- Gốc:  /css/...
+        /font/...
+        /images/...
+- Mới:  ~/statics/camping/css/....
+        ~/statics/camping/font/...
+        ~/statics/camping/images/...
+
+Run chương trình để kiểm tra lỗi
+
+B12: Hoàn thiện thêm các trang Giới thiệu, Liên hệ...vv
