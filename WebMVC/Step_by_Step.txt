@@ -1,8 +1,7 @@
-﻿B1: Tải về static web (HTML + CSS + JS)
+﻿B1: Tải về static web (HTML + CSS + JS): camping file
 B2: Tạo project WebMVC (ASP.NET)
 B3: Tạo thư mục Statics: để lưu trữ tất cả các tệp static của web
 B4: Copy nguyên thư mục camping vào thư mục Statics
-
 
 B5: Vào thư mục View/Shared
 - Tạo mới một tệp view Razor để làm bố cục mặc định thay thế cho _Layout.cshtml
@@ -51,3 +50,10 @@ B11: Thay thế đường dẫn mới để path đến các tệp static file c
 Run chương trình để kiểm tra lỗi
 
 B12: Hoàn thiện thêm các trang Giới thiệu, Liên hệ...vv
+
+
+__________________________________________
+ĐỌC + GHI DỮ LIỆU VÀO FILE EXCEL (TẠM THỜI TƯƠNG TÁC QUA RAZOR)
+THỰC HIỆN THAO TÁC TRÊN WEB
+
+B1: Tạo model cho đối tượng SinhVien
