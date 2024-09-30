@@ -56,4 +56,54 @@ __________________________________________
 ĐỌC + GHI DỮ LIỆU VÀO FILE EXCEL (TẠM THỜI TƯƠNG TÁC QUA RAZOR)
 THỰC HIỆN THAO TÁC TRÊN WEB
 
-B1: Tạo model cho đối tượng SinhVien
+B1: Tạo class cho đối tượng SinhVien trong thư mục Models
+B2: Tạo class hành động cho đối tượng SinhVien trong thư mục Models --> Đặt tên là SinhVienActions
+B3: Viết hàm GetAll() lấy về tất cả danh sách sinh viên. Hàm trả về kiểu List dành cho SinhVien
+B4: Viết thao tác mở, đọc excel (tương tự BT3)
+- Lưu ý khi sử dụng thư viện EPPlus thiết lấp sử dụng LicenseContext
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+Hoặc
+OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+B5: Tạo và viết Controller SinhVien để đưa data danh sách ra bên ngoài
+private readonly SinhVienActions _svActions;
+
+public SinhVienController()
+{
+    _svActions = new SinhVienActions();
+}
+
+public IActionResult GetAll()
+{
+    List<SinhVien> ds = _svActions.GetAll();
+    return View(ds);
+}
+
+B6: Tạo view GetAll, đón model data sinh viên và dùng foreach để loop các sinh viên dạng Bảng.
+
+@model List<SinhVien>
+
+@{
+    ViewData["Title"] = "Danh Sách Sinh Viên";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>CCCD</th>
+            <th>HỌ VÀ TÊN</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sinhVien in Model)
+        {
+            <tr>
+                <td>@sinhVien.Tt</td>
+                <td>@sinhVien.Cccd</td>
+                <td>@sinhVien.Hodem @sinhVien.Ten</td>
+            </tr>
+        }
+    </tbody>
+</table>

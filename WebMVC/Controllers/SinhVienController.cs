@@ -6,10 +6,10 @@ namespace WebMVC.Controllers
 {
     public class SinhVienController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         private readonly SinhVienActions _svActions;
 
