@@ -58,25 +58,73 @@ THỰC HIỆN THAO TÁC TRÊN WEB
 
 B1: Tạo class cho đối tượng SinhVien trong thư mục Models
 B2: Tạo class hành động cho đối tượng SinhVien trong thư mục Models --> Đặt tên là SinhVienActions
-B3: Viết hàm GetAll() lấy về tất cả danh sách sinh viên. Hàm trả về kiểu List dành cho SinhVien
-B4: Viết thao tác mở, đọc excel (tương tự BT3)
+- Xây dựng khung hành động cho đối tượng SinhVien
+- Cụ thể:
++) Khai báo kết nối đến tệp excel hoặc db
++) Lấy về danh sách
++) Lấy về một bản ghi theo ID
++) Thêm mới một bản ghi
++) Cập nhật thông tin cho bản ghi theo ID
++) Xóa tất cả
++) Xóa một bản ghi theo ID
+
+B3: Tạo thư mục Datas và thêm file excel ds_sinhvien.xlsx vào thư mục
+
+B4: Viết phần khai báo đường dẫn file excel & định nghĩa một hàm để lấy thông tin file excel
+
+private string filePath = @"C:\Users\hoatx\Source\Repos\67IT-ASP.NET\WebMVC\Datas\ds_sinhvien.xlsx";
+
+// Đây là hàm lấy về file Excel dạng FileStream thông qua sử dụng cái đối tượng FileInfo
+// Xem thêm ví dụ ở BT3
+// Mỗi lần hàm GetFileExcel được gọi sẽ trả về dữ liệu file excel đã được đọc.
+private FileInfo GetFileExcel()
+{
+    return new FileInfo(filePath);
+}
+
 - Lưu ý khi sử dụng thư viện EPPlus thiết lấp sử dụng LicenseContext
-ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-Hoặc
-OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
-B5: Tạo và viết Controller SinhVien để đưa data danh sách ra bên ngoài
-private readonly SinhVienActions _svActions;
 
-public SinhVienController()
+
+B3: Viết hàm GetAll() lấy về tất cả danh sách sinh viên
+public List<SinhVien> GetAll()
 {
-    _svActions = new SinhVienActions();
+    var ds_sv = new List<SinhVien>();
+
+    // Thiết lập LicenseContext
+    //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+    OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+
+    var file_excel = GetFileExcel();
+
+    using (var package = new ExcelPackage(file_excel))
+    {
+        var worksheet = package.Workbook.Worksheets[0]; // Lấy về sheet đầu tiên
+        var rowCount = worksheet.Dimension.Rows; // Đếm số dòng trong excel (có dữ liệu
+        var colCount = worksheet.Dimension.Columns;
+
+        for (int row = 2; row <= rowCount; row++) // Mỗi một dong trong danh là một sinh viên
+        {
+            // Ex Row Data: 0 |   1   |    2       | 3  | ....
+            // Ex Row Data: 1 | 11234 | Nguyễn Văn | An | ....
+            SinhVien sv = new SinhVien();
+            sv.Tt = Int32.Parse(worksheet.Cells[row, 1].Text);
+            sv.Cccd = worksheet.Cells[row, 2].Text;
+            sv.Hodem = worksheet.Cells[row, 3].Text;
+            sv.Ten = worksheet.Cells[row, 4].Text;
+            sv.Nickname = worksheet.Cells[row, 5].Text;
+            sv.Email = worksheet.Cells[row, 6].Text;
+            sv.Dienthoai = worksheet.Cells[row, 7].Text;
+            sv.Diem_tichluy = Double.Parse(worksheet.Cells[row, 8].Text);
+            sv.Diem_renluyen = Double.Parse(worksheet.Cells[row, 9].Text);
+
+            ds_sv.Add(sv);
+        }
+    }
+
+    return ds_sv;
 }
 
-public IActionResult GetAll()
-{
-    List<SinhVien> ds = _svActions.GetAll();
-    return View(ds);
-}
+
 
 B6: Tạo view GetAll, đón model data sinh viên và dùng foreach để loop các sinh viên dạng Bảng.
 
@@ -94,15 +142,37 @@ B6: Tạo view GetAll, đón model data sinh viên và dùng foreach để loop 
             <th>ID</th>
             <th>CCCD</th>
             <th>HỌ VÀ TÊN</th>
+            <th>NICKNAME</th>
+            <th>EMAIL</th>
+            <th>ĐIỆN THOẠI</th>
+            <th>ĐIỂM TÍCH LŨY</th>
+            <th>ĐIỂM RÈN LUYỆN</th>
+            <th>HÀNH ĐỘNG</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var sinhVien in Model)
+        @foreach (var sv in Model)
         {
             <tr>
-                <td>@sinhVien.Tt</td>
-                <td>@sinhVien.Cccd</td>
-                <td>@sinhVien.Hodem @sinhVien.Ten</td>
+                <td>@sv.Tt</td>
+                <td>@sv.Cccd</td>
+                <td>@sv.Hodem @sv.Ten</td>
+                <td>@sv.Nickname</td>
+                <td>@sv.Email</td>
+                <td>@sv.Dienthoai</td>
+                <td>@sv.Diem_tichluy</td>
+                <td>@sv.Diem_renluyen</td>
+                <td>
+                    @* <a asp-action="Edit" asp-route-id="@sv.Tt">Edit</a> *@
+                    <button 
+                        type="button" 
+                        class="btn btn-primary" 
+                        onclick="location.href='@Url.Action("Edit", "SinhVien", new { id = sv.Tt })'">Chỉnh sửa</button>
+
+                    <form asp-action="Delete" asp-route-id="@sv.Tt" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>

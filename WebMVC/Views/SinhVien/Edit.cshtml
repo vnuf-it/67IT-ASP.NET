@@ -1,0 +1,53 @@
+﻿@model SinhVien
+
+@{
+    ViewData["Title"] = "Chỉnh sửa Sinh Viên";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Tt" />
+    <div class="form-group">
+        <label>CCCD</label>
+        <input asp-for="Cccd" class="form-control" />
+        <span asp-validation-for="Cccd" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Họ đệm</label>
+        <input asp-for="Hodem" class="form-control" />
+        <span asp-validation-for="Hodem" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Tên</label>
+        <input asp-for="Ten" class="form-control" />
+        <span asp-validation-for="Ten" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Nickname</label>
+        <input asp-for="Nickname" class="form-control" />
+        <span asp-validation-for="Nickname" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Điện thoại</label>
+        <input asp-for="Dienthoai" class="form-control" />
+        <span asp-validation-for="Dienthoai" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Điểm tích lũy</label>
+        <input asp-for="Diem_tichluy" class="form-control" />
+        <span asp-validation-for="Diem_tichluy" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Điểm rèn luyện</label>
+        <input asp-for="Diem_renluyen" class="form-control" />
+        <span asp-validation-for="Diem_renluyen" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

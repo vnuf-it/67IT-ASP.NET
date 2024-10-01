@@ -10,7 +10,11 @@ namespace WebMVC.Models
     public class SinhVienActions
     {
         // Khai báo đường dẫn file excel
-        //const string file_excel = @"C:\Users\hoatx\Source\Repos\67IT-ASP.NET\WebMVC\Datas\ds_sinhvien.xlsx";
+        private string filePath = @"C:\Users\hoatx\Source\Repos\67IT-ASP.NET\WebMVC\Datas\ds_sinhvien.xlsx";
+        private FileInfo GetFileExcel()
+        {
+            return new FileInfo(filePath);
+        }
 
         // Lấy tất cả các sinh viên (GetAll)
         public List<SinhVien> GetAll()
@@ -21,9 +25,7 @@ namespace WebMVC.Models
             //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-
-            var filePath = @"C:\Users\hoatx\Source\Repos\67IT-ASP.NET\WebMVC\Datas\ds_sinhvien.xlsx";
-            var file_excel = new FileInfo(filePath);
+            var file_excel = GetFileExcel();
 
             using (var package = new ExcelPackage(file_excel))
             {
@@ -54,18 +56,139 @@ namespace WebMVC.Models
         }
 
         // Lấy thông chi tiết của một sinh viên (GetByID)
+        public SinhVien GetByID(int id)
+        {
+            var file_excel = GetFileExcel();
+            SinhVien sv = null;
 
+            using (var package = new ExcelPackage(file_excel))
+            {
+                var worksheet = package.Workbook.Worksheets[0];
+                var rowCount = worksheet.Dimension.Rows;
+
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    if (Int32.Parse(worksheet.Cells[row, 1].Text) == id) // Kiểm tra ID
+                    {
+                        sv = new SinhVien
+                        {
+                            Tt = id,
+                            Cccd = worksheet.Cells[row, 2].Text,
+                            Hodem = worksheet.Cells[row, 3].Text,
+                            Ten = worksheet.Cells[row, 4].Text,
+                            Nickname = worksheet.Cells[row, 5].Text,
+                            Email = worksheet.Cells[row, 6].Text,
+                            Dienthoai = worksheet.Cells[row, 7].Text,
+                            Diem_tichluy = Double.Parse(worksheet.Cells[row, 8].Text),
+                            Diem_renluyen = Double.Parse(worksheet.Cells[row, 9].Text)
+                        };
+                        break; // Dừng vòng lặp khi tìm thấy sinh viên
+                    }
+                }
+            }
+
+            return sv; // Trả về sinh viên hoặc null nếu không tìm thấy
+        }
 
         // Thêm (Add)
+        public void Add(SinhVien sv)
+        {
+            var file_excel = GetFileExcel(); // Sử dụng phương thức để lấy FileInfo
 
+            using (var package = new ExcelPackage(file_excel))
+            {
+                var worksheet = package.Workbook.Worksheets[0];
+                var rowCount = worksheet.Dimension.Rows;
+
+                // Thêm sinh viên mới vào hàng tiếp theo
+                worksheet.Cells[rowCount + 1, 1].Value = sv.Tt;
+                worksheet.Cells[rowCount + 1, 2].Value = sv.Cccd;
+                worksheet.Cells[rowCount + 1, 3].Value = sv.Hodem;
+                worksheet.Cells[rowCount + 1, 4].Value = sv.Ten;
+                worksheet.Cells[rowCount + 1, 5].Value = sv.Nickname;
+                worksheet.Cells[rowCount + 1, 6].Value = sv.Email;
+                worksheet.Cells[rowCount + 1, 7].Value = sv.Dienthoai;
+                worksheet.Cells[rowCount + 1, 8].Value = sv.Diem_tichluy;
+                worksheet.Cells[rowCount + 1, 9].Value = sv.Diem_renluyen;
+
+                package.Save(); // Lưu thay đổi vào tệp
+            }
+        }
 
         // Cập nhật (UpdateByID)
+        public void Update(SinhVien sv)
+        {
+            var file_excel = GetFileExcel(); // Sử dụng phương thức để lấy FileInfo
 
+            using (var package = new ExcelPackage(file_excel))
+            {
+                var worksheet = package.Workbook.Worksheets[0];
+                var rowCount = worksheet.Dimension.Rows;
+
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    if (Int32.Parse(worksheet.Cells[row, 1].Text) == sv.Tt) // Kiểm tra ID
+                    {
+                        // Cập nhật thông tin sinh viên
+                        worksheet.Cells[row, 2].Value = sv.Cccd;
+                        worksheet.Cells[row, 3].Value = sv.Hodem;
+                        worksheet.Cells[row, 4].Value = sv.Ten;
+                        worksheet.Cells[row, 5].Value = sv.Nickname;
+                        worksheet.Cells[row, 6].Value = sv.Email;
+                        worksheet.Cells[row, 7].Value = sv.Dienthoai;
+                        worksheet.Cells[row, 8].Value = sv.Diem_tichluy;
+                        worksheet.Cells[row, 9].Value = sv.Diem_renluyen;
+
+                        break; // Dừng vòng lặp khi đã cập nhật
+                    }
+                }
+
+                package.Save(); // Lưu thay đổi vào tệp
+            }
+        }
 
         // Xóa tất cả (DeleteAll)
+        public void DeleteAll()
+        {
+            var file_excel = GetFileExcel(); // Sử dụng phương thức để lấy FileInfo
 
+            using (var package = new ExcelPackage(file_excel))
+            {
+                var worksheet = package.Workbook.Worksheets[0];
+                var rowCount = worksheet.Dimension.Rows;
+
+                // Xóa tất cả hàng từ hàng 2 trở đi
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    worksheet.DeleteRow(2); // Luôn xóa hàng thứ 2 cho đến khi không còn hàng
+                }
+
+                package.Save(); // Lưu thay đổi vào tệp
+            }
+        }
 
         // Xóa một sinh viên (DeleteByID)
+        public void DeleteByID(int id)
+        {
+            var file_excel = GetFileExcel(); // Sử dụng phương thức để lấy FileInfo
+
+            using (var package = new ExcelPackage(file_excel))
+            {
+                var worksheet = package.Workbook.Worksheets[0];
+                var rowCount = worksheet.Dimension.Rows;
+
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    if (Int32.Parse(worksheet.Cells[row, 1].Text) == id) // Kiểm tra ID
+                    {
+                        worksheet.DeleteRow(row); // Xóa hàng sinh viên
+                        break; // Dừng vòng lặp khi đã xóa
+                    }
+                }
+
+                package.Save(); // Lưu thay đổi vào tệp
+            }
+        }
 
     }
 }
