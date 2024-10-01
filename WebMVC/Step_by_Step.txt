@@ -70,7 +70,7 @@ B2: Tạo class hành động cho đối tượng SinhVien trong thư mục Mode
 
 B3: Tạo thư mục Datas và thêm file excel ds_sinhvien.xlsx vào thư mục
 
-B4: Viết phần khai báo đường dẫn file excel & định nghĩa một hàm để lấy thông tin file excel
+B4: SinhVienActions: Viết phần khai báo đường dẫn file excel & định nghĩa một hàm để lấy thông tin file excel
 
 private string filePath = @"C:\Users\hoatx\Source\Repos\67IT-ASP.NET\WebMVC\Datas\ds_sinhvien.xlsx";
 
@@ -85,7 +85,7 @@ private FileInfo GetFileExcel()
 - Lưu ý khi sử dụng thư viện EPPlus thiết lấp sử dụng LicenseContext
 
 
-B3: Viết hàm GetAll() lấy về tất cả danh sách sinh viên
+B5: SinhVienActions: Viết hàm GetAll() lấy về tất cả danh sách sinh viên
 public List<SinhVien> GetAll()
 {
     var ds_sv = new List<SinhVien>();
@@ -124,9 +124,26 @@ public List<SinhVien> GetAll()
     return ds_sv;
 }
 
+B6: Tạo SinhVienController
+- Mỗi khi SinhVienController được khởi tạo sẽ khởi tạo hành động đối với sinh viên
+
+private readonly SinhVienActions _svActions;
+// Hàm khởi tạo SinhVienController
+public SinhVienController()
+{
+    _svActions = new SinhVienActions(); // Khởi tạo SinhVienActions
+}
+
+B7: SinhVienController: tạo IActionResult Index() --> trả về xem danh sách SinhVien
+
+public IActionResult Index()
+{
+    var dsSinhVien = _svActions.GetAll(); // Lấy tất cả sinh viên
+    return View(dsSinhVien); // Trả về view với danh sách sinh viên
+}
 
 
-B6: Tạo view GetAll, đón model data sinh viên và dùng foreach để loop các sinh viên dạng Bảng.
+B8: Tạo view Index.cshtml --> hiển thị danh sách sinh viên
 
 @model List<SinhVien>
 
