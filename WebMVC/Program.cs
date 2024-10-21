@@ -23,7 +23,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "67IT HTTT API V1");
+    c.RoutePrefix = "api-docs";
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
