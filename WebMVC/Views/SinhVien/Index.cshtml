@@ -6,7 +6,9 @@
 
 
 <h1>@ViewData["Title"]</h1>
-<a asp-action="Create" class="btn btn-success">Thêm mới</a>
+<div>
+    <a asp-action="Create" class="btn btn-success btn-sm">Thêm mới</a>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -34,15 +36,14 @@
                 <td>@sv.Diem_tichluy</td>
                 <td>@sv.Diem_renluyen</td>
                 <td>
-                    @* <a asp-action="Edit" asp-route-id="@sv.Tt">Edit</a> *@
                     <button type="button"
-                            class="btn btn-primary"
+                            class="btn btn-primary btn-sm"
                             onclick="location.href='@Url.Action("Edit", "SinhVien", new { id = sv.Tt })'">
                         Chỉnh sửa
                     </button>
 
                     <form asp-action="Delete" asp-route-id="@sv.Tt" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Delete</button>
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Delete</button>
                     </form>
                 </td>
             </tr>
