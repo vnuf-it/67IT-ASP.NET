@@ -83,8 +83,15 @@ namespace WebMVC.Controllers
         //    }
 
         //    // Update the existing SinhVien with new values
-        //    existing_sv.Hodem = existing_sv.Hodem;
-        //    existing_sv.Ten = existing_sv.Ten;
+        //    existing_sv.Tt = sv.Tt;
+        //    existing_sv.Hodem = sv.Hodem;
+        //    existing_sv.Ten = sv.Ten;
+        //    existing_sv.Cccd = sv.Cccd;
+        //    existing_sv.Nickname = sv.Nickname;
+        //    existing_sv.Email = sv.Email;
+        //    existing_sv.Dienthoai = sv.Dienthoai;
+        //    existing_sv.Diem_tichluy = sv.Diem_tichluy;
+        //    existing_sv.Diem_renluyen = sv.Diem_renluyen;
         //    // Add other properties as needed
 
         //    _svActions.Update(existing_sv);
@@ -109,8 +116,15 @@ namespace WebMVC.Controllers
             }
 
             // Update the existing SinhVien with new values
+            existing_sv.Tt = sv.Tt;
             existing_sv.Hodem = sv.Hodem;
             existing_sv.Ten = sv.Ten;
+            existing_sv.Cccd = sv.Cccd;
+            existing_sv.Nickname = sv.Nickname;
+            existing_sv.Email = sv.Email;
+            existing_sv.Dienthoai = sv.Dienthoai;
+            existing_sv.Diem_tichluy = sv.Diem_tichluy;
+            existing_sv.Diem_renluyen = sv.Diem_renluyen;
             // Add other properties as needed
 
             _svActions.Update(existing_sv);

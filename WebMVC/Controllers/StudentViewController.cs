@@ -19,7 +19,7 @@ namespace WebMVC.Controllers
             return View();
         }
 
-        public IActionResult CapNhat()
+        public IActionResult ChinhSua()
         {
             return View();
         }
