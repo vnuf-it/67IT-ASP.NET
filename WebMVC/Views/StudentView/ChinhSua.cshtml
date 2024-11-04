@@ -59,7 +59,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const pathArray = window.location.pathname.split('/');
-        const tt = pathArray[pathArray.length - 1];
+        // const tt = pathArray[pathArray.length - 1];
+        const tt = pathArray.pop();
 
         // Check if 'tt' is correctly retrieved
         if (!tt) {
