@@ -1,0 +1,105 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h2>Thêm mới Sinh viên</h2>
+
+<div id="addSinhVienForm">
+    <div class="form-group">
+        <label for="Tt">TT</label>
+        <input type="text" id="Tt" name="Tt" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Cccd">CCCD</label>
+        <input type="text" id="Cccd" name="Cccd" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Hodem">Họ đệm</label>
+        <input type="text" id="Hodem" name="Hodem" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Ten">Tên</label>
+        <input type="text" id="Ten" name="Ten" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Nickname">Nickname</label>
+        <input type="text" id="Nickname" name="Nickname" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" id="Email" name="Email" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Dienthoai">Điện thoại</label>
+        <input type="text" id="Dienthoai" name="Dienthoai" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Diem_tichluy">Điểm tích lũy</label>
+        <input type="number" id="Diem_tichluy" name="Diem_tichluy" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Diem_renluyen">Điểm rèn luyện</label>
+        <input type="number" id="Diem_renluyen" name="Diem_renluyen" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <button type="button" onclick="submitSinhVien()" class="btn btn-primary">Lưu</button>
+    <button type="button" onclick="closeForm()" class="btn btn-secondary">Hủy</button>
+</div>
+
+<script>
+    function closeForm() {
+        // document.getElementById('addSinhVienForm').style.display = 'none';
+        window.location.href = '/StudentView/Index';
+    }
+
+    function submitSinhVien() {
+        const tt = document.getElementById('Tt').value;
+        const cccd = document.getElementById('Cccd').value;
+        const hodem = document.getElementById('Hodem').value;
+        const ten = document.getElementById('Ten').value;
+        const nickname = document.getElementById('Nickname').value;
+        const email = document.getElementById('Email').value;
+        const dienthoai = document.getElementById('Dienthoai').value;
+        const diem_tichluy = document.getElementById('Diem_tichluy').value;
+        const diem_renluyen = document.getElementById('Diem_renluyen').value;
+
+        const sv = {
+            Tt: tt,
+            Cccd: cccd,
+            Hodem: hodem,
+            Ten: ten,
+            Nickname: nickname,
+            Email: email,
+            Dienthoai: dienthoai,
+            Diem_tichluy: parseFloat(diem_tichluy),
+            Diem_renluyen: parseFloat(diem_renluyen)
+        };
+
+        fetch('/api/student', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(sv)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('SinhVien added successfully!');
+            console.log('Success:', data);
+            window.location.href = '/StudentView/Index'; // Redirect to index page after successful submission
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+</script>

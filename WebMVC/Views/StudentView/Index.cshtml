@@ -1,0 +1,95 @@
+﻿    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+@{
+}
+
+<h2>Danh sách Sinh viên</h2>
+
+<div>
+    <button class="btn btn-success btn-sm" id="sinh-vien-add">Thêm mới</button>
+</div>
+<div id="sinh-vien-list">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Họ đệm</th>
+                <th>Tên</th>
+                <th>CCCD</th>
+                <th>Email</th>
+                <th>Điện thoại</th>
+                <th>Điểm tích lũy</th>
+                <th>Điểm rèn luyện</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody id="sinh-vien-list-body"></tbody>
+    </table>
+</div>
+
+<script>
+    fetch('/api/student')
+        .then(response => response.json())
+        .then(data => {
+            const sinhVienListContainer = document.getElementById('sinh-vien-list-body');
+            sinhVienListContainer.innerHTML = '';
+
+            data.forEach(sinhVien => {
+                const sinhVienItem = document.createElement('tr');
+                sinhVienItem.innerHTML = `
+                <td>${sinhVien.Tt}</td>
+                <td>${sinhVien.Hodem}</td>
+                <td>${sinhVien.Ten}</td>
+                <td>${sinhVien.Cccd}</td>
+                <td>${sinhVien.Email}</td>
+                <td>${sinhVien.Dienthoai}</td>
+                <td>${sinhVien.Diem_tichluy}</td>
+                <td>${sinhVien.Diem_renluyen}</td>
+                <td>
+                    <button class="btn btn-info btn-sm" onclick="viewDetail(${sinhVien.Tt})">Xem chi tiết</button>
+                    <button class="btn btn-warning btn-sm" onclick="editStudent(${sinhVien.Tt})">Chỉnh sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteStudent(${sinhVien.Tt})">Xóa</button>
+                </td>
+                `;
+                sinhVienListContainer.appendChild(sinhVienItem);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+
+    document.getElementById('sinh-vien-add').addEventListener('click', 
+    function() {
+        window.location.href = '/StudentView/ThemMoi';
+    });
+
+    function viewDetail(tt) {
+        window.location.href = `/StudentView/ChiTiet/${tt}`;
+    }
+
+    function editStudent(tt) {
+        window.location.href = `/StudentView/ChinhSua/${tt}`;
+    }
+
+    function deleteStudent(tt) {
+        if (confirm('Bạn có chắc chắn muốn xóa sinh viên này?')) {
+            fetch(`/api/student/${tt}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Delete successful') {
+                    alert('Sinh viên đã được xóa thành công!');
+                    window.location.href = '/StudentView/Index';
+                } else {
+                    alert('Không thể xóa sinh viên này. ' + data.error);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    }
+
+</script>

@@ -1,0 +1,96 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h2>Chi tiết Sinh viên</h2>
+
+<div id="detailSinhVienForm">
+    <div class="form-group">
+        <label for="Tt">TT</label>
+        <input type="text" id="Tt" name="Tt" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Cccd">CCCD</label>
+        <input type="text" id="Cccd" name="Cccd" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Hodem">Họ đệm</label>
+        <input type="text" id="Hodem" name="Hodem" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Ten">Tên</label>
+        <input type="text" id="Ten" name="Ten" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Nickname">Nickname</label>
+        <input type="text" id="Nickname" name="Nickname" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" id="Email" name="Email" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Dienthoai">Điện thoại</label>
+        <input type="text" id="Dienthoai" name="Dienthoai" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Diem_tichluy">Điểm tích lũy</label>
+        <input type="number" id="Diem_tichluy" name="Diem_tichluy" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Diem_renluyen">Điểm rèn luyện</label>
+        <input type="number" id="Diem_renluyen" name="Diem_renluyen" class="form-control" required>
+        <span class="text-danger"></span>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const pathArray = window.location.pathname.split('/');
+        const tt = pathArray[pathArray.length - 1];
+
+        // Check if 'tt' is correctly retrieved
+        if (!tt) {
+            console.error('Error: Missing or invalid "tt" parameter in URL');
+            return;
+        }
+
+        fetch(`/api/student/${tt}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('Tt').value = data.Tt;
+                document.getElementById('Cccd').value = data.Cccd;
+                document.getElementById('Hodem').value = data.Hodem;
+                document.getElementById('Ten').value = data.Ten;
+                document.getElementById('Nickname').value = data.Nickname;
+                document.getElementById('Email').value = data.Email;
+                document.getElementById('Dienthoai').value = data.Dienthoai;
+                document.getElementById('Diem_tichluy').value = data.Diem_tichluy;
+                document.getElementById('Diem_renluyen').value = data.Diem_renluyen;
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+</script>

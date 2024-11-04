@@ -57,7 +57,10 @@ Author URL: http://w3layouts.com
                     <ul class="menu mt-2">
                         <li class="active"><a href="/">Trang chủ</a></li>
                         <li><a href="/GioiThieu/Index">Giới thiệu</a></li>
-                        <li><a href="/SinhVien/Index">Danh sách sinh viên</a></li>
+                        <li><a href="/api-docs/">API-Docs</a></li>
+                        <li><a href="/SinhVien/Index">Sinh viên 1</a></li>
+                        <li><a href="/StudentView/Index">Sinh viên 2</a></li>
+
                         <li class="dropdown">
                             <!-- First Tier Drop Down -->
                             <label for="drop-2" class="toggle">Drop Down <span class="fa fa-angle-down" aria-hidden="true"></span> </label>
@@ -76,7 +79,7 @@ Author URL: http://w3layouts.com
                             </ul>
                         </li>
                         <li>
-                            <a href="contact.html">Contact</a>
+                            <a href="contact.html">Liên hệ</a>
                         </li>
                     </ul>
                 </nav>
@@ -188,5 +191,7 @@ Author URL: http://w3layouts.com
         </div>
     </div>
     <!-- //copyright -->
+    @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
