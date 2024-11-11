@@ -8,6 +8,9 @@
 <div>
     <button class="btn btn-success btn-sm" id="sinh-vien-add">Thêm mới</button>
 </div>
+<div>
+    <button class="btn btn-success btn-sm" id="sinh-vien-sort" onclick="sort_asc()">Sắp xếp</button>
+</div>
 <div id="sinh-vien-list">
     <table class="table">
         <thead>
@@ -27,39 +30,43 @@
     </table>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
+    let dssv;
+
     fetch('/api/student')
         .then(response => response.json())
         .then(data => {
+            dssv = data;
             const sinhVienListContainer = document.getElementById('sinh-vien-list-body');
             sinhVienListContainer.innerHTML = '';
 
             data.forEach(sinhVien => {
                 const sinhVienItem = document.createElement('tr');
                 sinhVienItem.innerHTML = `
-                <td>${sinhVien.Tt}</td>
-                <td>${sinhVien.Hodem}</td>
-                <td>${sinhVien.Ten}</td>
-                <td>${sinhVien.Cccd}</td>
-                <td>${sinhVien.Email}</td>
-                <td>${sinhVien.Dienthoai}</td>
-                <td>${sinhVien.Diem_tichluy}</td>
-                <td>${sinhVien.Diem_renluyen}</td>
-                <td>
-                    <button class="btn btn-info btn-sm" onclick="viewDetail(${sinhVien.Tt})">Xem chi tiết</button>
-                    <button class="btn btn-warning btn-sm" onclick="editStudent(${sinhVien.Tt})">Chỉnh sửa</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteStudent(${sinhVien.Tt})">Xóa</button>
-                </td>
-                `;
+                    <td>${sinhVien.Tt}</td>
+                    <td>${sinhVien.Hodem}</td>
+                    <td>${sinhVien.Ten}</td>
+                    <td>${sinhVien.Cccd}</td>
+                    <td>${sinhVien.Email}</td>
+                    <td>${sinhVien.Dienthoai}</td>
+                    <td>${sinhVien.Diem_tichluy}</td>
+                    <td>${sinhVien.Diem_renluyen}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" onclick="viewDetail(${sinhVien.Tt})">Xem chi tiết</button>
+                        <button class="btn btn-warning btn-sm" onclick="editStudent(${sinhVien.Tt})">Chỉnh sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteStudent(${sinhVien.Tt})">Xóa</button>
+                    </td>
+                    `;
                 sinhVienListContainer.appendChild(sinhVienItem);
             });
         })
         .catch(error => console.error('Error:', error));
 
-    document.getElementById('sinh-vien-add').addEventListener('click', 
-    function() {
-        window.location.href = '/StudentView/ThemMoi';
-    });
+    document.getElementById('sinh-vien-add').addEventListener('click',
+        function() {
+            window.location.href = '/StudentView/ThemMoi';
+        });
 
     function viewDetail(tt) {
         window.location.href = `/StudentView/ChiTiet/${tt}`;
@@ -77,19 +84,49 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message === 'Delete successful') {
-                    alert('Sinh viên đã được xóa thành công!');
-                    window.location.href = '/StudentView/Index';
-                } else {
-                    alert('Không thể xóa sinh viên này. ' + data.error);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Delete successful') {
+                        alert('Sinh viên đã được xóa thành công!');
+                        window.location.href = '/StudentView/Index';
+                    } else {
+                        alert('Không thể xóa sinh viên này. ' + data.error);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         }
     }
 
+
+    function sort_asc() {
+        dssv.sort((a, b) => (a.Ten > b.Ten ? 1 : -1));
+        console.log(dssv);
+
+        $("#sinh-vien-list-body").empty();
+
+        const sinhVienListSort = document.getElementById('sinh-vien-list-body');
+        sinhVienListSort.innerHTML = '';
+
+        dssv.forEach(sinhVien => {
+            const sinhVienItem = document.createElement('tr');
+            sinhVienItem.innerHTML = `
+                        <td>${sinhVien.Tt}</td>
+                        <td>${sinhVien.Hodem}</td>
+                        <td>${sinhVien.Ten}</td>
+                        <td>${sinhVien.Cccd}</td>
+                        <td>${sinhVien.Email}</td>
+                        <td>${sinhVien.Dienthoai}</td>
+                        <td>${sinhVien.Diem_tichluy}</td>
+                        <td>${sinhVien.Diem_renluyen}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="viewDetail(${sinhVien.Tt})">Xem chi tiết</button>
+                            <button class="btn btn-warning btn-sm" onclick="editStudent(${sinhVien.Tt})">Chỉnh sửa</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteStudent(${sinhVien.Tt})">Xóa</button>
+                        </td>
+                        `;
+            sinhVienListSort.appendChild(sinhVienItem);
+        });
+    }
 </script>
