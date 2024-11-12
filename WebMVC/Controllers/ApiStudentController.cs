@@ -29,6 +29,39 @@ namespace WebMVC.Controllers
             return strJson;
         }
 
+        [HttpGet("sort")]
+        public string GetSorted(string sortBy, string order = "asc")
+        {
+            var dsSinhVien = _svActions.GetAll(); // Lấy tất cả sinh viên
+
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                // Lấy kiểu dữ liệu của thuộc tính được chỉ định để sắp xếp
+                var propertyType = typeof(SinhVien).GetProperty(sortBy).PropertyType;
+                // Kiểm tra xem thuộc tính có phải là chuỗi không
+                var isString = propertyType == typeof(string);
+                // Kiểm tra xem thứ tự sắp xếp có phải là giảm dần không
+                var isDesc = order.ToLower() == "des";
+
+                // Thực hiện sắp xếp dựa trên các điều kiện trên
+                dsSinhVien = isDesc
+                    ? isString
+                        // Nếu giảm dần và thuộc tính là chuỗi, sắp xếp giảm dần theo chuỗi
+                        ? dsSinhVien.OrderByDescending(sv => sv.GetType().GetProperty(sortBy).GetValue(sv).ToString()).ToList()
+                        // Nếu giảm dần và thuộc tính không phải là chuỗi, sắp xếp giảm dần theo số
+                        : dsSinhVien.OrderByDescending(sv => Convert.ToDouble(sv.GetType().GetProperty(sortBy).GetValue(sv))).ToList()
+                    : isString
+                        // Nếu tăng dần và thuộc tính là chuỗi, sắp xếp tăng dần theo chuỗi
+                        ? dsSinhVien.OrderBy(sv => sv.GetType().GetProperty(sortBy).GetValue(sv).ToString()).ToList()
+                        // Nếu tăng dần và thuộc tính không phải là chuỗi, sắp xếp tăng dần theo số
+                        : dsSinhVien.OrderBy(sv => Convert.ToDouble(sv.GetType().GetProperty(sortBy).GetValue(sv))).ToList();
+            }
+
+            var opt = new JsonSerializerOptions() { WriteIndented = true };
+            string strJson = JsonSerializer.Serialize<IList<SinhVien>>(dsSinhVien, opt);
+            return strJson;
+        }
+
         // GET api/<StudentController>/5
         [HttpGet("{id}")]
         public string Get(int id)

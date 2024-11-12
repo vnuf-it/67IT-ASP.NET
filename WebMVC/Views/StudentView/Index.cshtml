@@ -9,21 +9,48 @@
     <button class="btn btn-success btn-sm" id="sinh-vien-add">Thêm mới</button>
 </div>
 <div>
+    @*     
     <button class="btn btn-success btn-sm" id="sinh-vien-sort" onclick="sort_asc()">Sắp xếp</button>
+    *@
 </div>
 <div id="sinh-vien-list">
     <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>TT</th>
                 <th>Họ đệm</th>
                 <th>Tên</th>
+                <th>Nickname</th>
                 <th>CCCD</th>
                 <th>Email</th>
                 <th>Điện thoại</th>
                 <th>Điểm tích lũy</th>
                 <th>Điểm rèn luyện</th>
                 <th>Hành động</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th style="white-space: nowrap;">
+                    <button class="btn btn-success btn-sm" onclick="sort('Ten','asc')">↓</button>
+                    <button class="btn btn-success btn-sm" onclick="sort('Ten','des')">↑</button>
+                </th>
+                <th style="white-space: nowrap;">
+                    <button class="btn btn-success btn-sm" onclick="oder('Nickname','asc')">↓</button>
+                    <button class="btn btn-success btn-sm" onclick="oder('Nickname','des')">↑</button>
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th style="white-space: nowrap;">
+                    <button class="btn btn-success btn-sm" onclick="sort('Diem_tichluy','asc')">↓</button>
+                    <button class="btn btn-success btn-sm" onclick="sort('Diem_tichluy','des')">↑</button>
+                </th>
+                <th style="white-space: nowrap;">
+                    <button class="btn btn-success btn-sm" onclick="oder('Diem_renluyen','asc')">↓</button>
+                    <button class="btn btn-success btn-sm" onclick="oder('Diem_renluyen','des')">↑</button>
+                </th>
+                <th></th>
             </tr>
         </thead>
         <tbody id="sinh-vien-list-body"></tbody>
@@ -49,20 +76,21 @@
             data.forEach(sinhVien => {
                 const sinhVienItem = document.createElement('tr');
                 sinhVienItem.innerHTML = `
-                    <td>${sinhVien.Tt}</td>
-                    <td>${sinhVien.Hodem}</td>
-                    <td>${sinhVien.Ten}</td>
-                    <td>${sinhVien.Cccd}</td>
-                    <td>${sinhVien.Email}</td>
-                    <td>${sinhVien.Dienthoai}</td>
-                    <td>${sinhVien.Diem_tichluy}</td>
-                    <td>${sinhVien.Diem_renluyen}</td>
-                    <td>
-                        <button class="btn btn-info btn-sm" onclick="viewDetail(${sinhVien.Tt})">Xem chi tiết</button>
-                        <button class="btn btn-warning btn-sm" onclick="editStudent(${sinhVien.Tt})">Chỉnh sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteStudent(${sinhVien.Tt})">Xóa</button>
-                    </td>
-                    `;
+                        <td>${sinhVien.Tt}</td>
+                        <td>${sinhVien.Hodem}</td>
+                        <td>${sinhVien.Ten}</td>
+                        <td>${sinhVien.Nickname}</td>
+                        <td>${sinhVien.Cccd}</td>
+                        <td>${sinhVien.Email}</td>
+                        <td>${sinhVien.Dienthoai}</td>
+                        <td>${sinhVien.Diem_tichluy}</td>
+                        <td>${sinhVien.Diem_renluyen}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="viewDetail(${sinhVien.Tt})">Xem</button>
+                            <button class="btn btn-warning btn-sm" onclick="editStudent(${sinhVien.Tt})">Sửa</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteStudent(${sinhVien.Tt})">Xóa</button>
+                        </td>
+                        `;
                 sinhVienListContainer.appendChild(sinhVienItem);
             });
         })
@@ -105,10 +133,73 @@
     }
 
 
-    function sort_asc() {
-        dssv.sort((a, b) => (a.Ten > b.Ten ? 1 : -1));
+    // Cách 1: Hàm sort riêng chỉ dùng cho tùy viến một trường (vd: Ten)
+    // function sort_asc() {
+    //     dssv.sort((a, b) => (a.Ten > b.Ten ? 1 : -1));
+    //     console.log(dssv);
+
+    //     $("#sinh-vien-list-body").empty();
+
+    //     const sinhVienListSort = document.getElementById('sinh-vien-list-body');
+    //     sinhVienListSort.innerHTML = '';
+
+    //     dssv.forEach(sinhVien => {
+    //         const sinhVienItem = document.createElement('tr');
+    //         sinhVienItem.innerHTML = `
+    //                     <td>${sinhVien.Tt}</td>
+    //                     <td>${sinhVien.Hodem}</td>
+    //                     <td>${sinhVien.Ten}</td>
+    //                     <td>${sinhVien.Cccd}</td>
+    //                     <td>${sinhVien.Email}</td>
+    //                     <td>${sinhVien.Dienthoai}</td>
+    //                     <td>${sinhVien.Diem_tichluy}</td>
+    //                     <td>${sinhVien.Diem_renluyen}</td>
+    //                     <td>
+    //                         <button class="btn btn-info btn-sm" onclick="viewDetail(${sinhVien.Tt})">Xem</button>
+    //                         <button class="btn btn-warning btn-sm" onclick="editStudent(${sinhVien.Tt})">Sửa</button>
+    //                         <button class="btn btn-danger btn-sm" onclick="deleteStudent(${sinhVien.Tt})">Xóa</button>
+    //                     </td>
+    //                     `;
+    //         sinhVienListSort.appendChild(sinhVienItem);
+    //     });
+    // }
+
+
+    // Cách 2: Viết tùy biến sắp xếp các trường
+    // Định nghĩa hàm sắp xếp. Trong đó có 2 tham số
+    // sort_field: là trường sẽ sắp xếp
+    // sort_type: là kiểu sắp xếp (acs: tăng dần, des: giảm dẫn)
+
+    function sort(sort_field, sort_type) {
+        dssv.sort((a, b) => {
+            // Kiểm tra xem giá trị của trường sắp xếp có phải là chuỗi không
+            if (typeof a[sort_field] === 'string') {
+                // Nếu kiểu sắp xếp là giảm dần
+                if (sort_type === "des") {
+                    // So sánh chuỗi và trả về kết quả để sắp xếp giảm dần
+                    return b[sort_field].toLowerCase().localeCompare(a[sort_field].toLowerCase());
+                } else {
+                    // Nếu kiểu sắp xếp không phải giảm dần (tức là tăng dần), so sánh chuỗi và trả về kết quả để sắp xếp tăng dần
+                    return a[sort_field].toLowerCase().localeCompare(b[sort_field].toLowerCase());
+                }
+            } else {
+                // Nếu giá trị của trường sắp xếp không phải là chuỗi (tức là số), so sánh trực tiếp để sắp xếp
+                if (sort_type === "des") {
+                    // Sắp xếp giảm dần
+                    return b[sort_field] - a[sort_field];
+                } else {
+                    // Sắp xếp tăng dần
+                    return a[sort_field] - b[sort_field];
+                }
+            }
+        });
         console.log(dssv);
 
+        reload(dssv);
+    }
+
+
+    function reload(dssv) {
         $("#sinh-vien-list-body").empty();
 
         const sinhVienListSort = document.getElementById('sinh-vien-list-body');
@@ -117,21 +208,49 @@
         dssv.forEach(sinhVien => {
             const sinhVienItem = document.createElement('tr');
             sinhVienItem.innerHTML = `
-                        <td>${sinhVien.Tt}</td>
-                        <td>${sinhVien.Hodem}</td>
-                        <td>${sinhVien.Ten}</td>
-                        <td>${sinhVien.Cccd}</td>
-                        <td>${sinhVien.Email}</td>
-                        <td>${sinhVien.Dienthoai}</td>
-                        <td>${sinhVien.Diem_tichluy}</td>
-                        <td>${sinhVien.Diem_renluyen}</td>
-                        <td>
-                            <button class="btn btn-info btn-sm" onclick="viewDetail(${sinhVien.Tt})">Xem chi tiết</button>
-                            <button class="btn btn-warning btn-sm" onclick="editStudent(${sinhVien.Tt})">Chỉnh sửa</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteStudent(${sinhVien.Tt})">Xóa</button>
-                        </td>
-                        `;
+                                <td>${sinhVien.Tt}</td>
+                                <td>${sinhVien.Hodem}</td>
+                                <td>${sinhVien.Ten}</td>
+                                <td>${sinhVien.Nickname}</td>
+                                <td>${sinhVien.Cccd}</td>
+                                <td>${sinhVien.Email}</td>
+                                <td>${sinhVien.Dienthoai}</td>
+                                <td>${sinhVien.Diem_tichluy}</td>
+                                <td>${sinhVien.Diem_renluyen}</td>
+                                <td>
+                                    <button class="btn btn-info btn-sm" onclick="viewDetail(${sinhVien.Tt})">Xem</button>
+                                    <button class="btn btn-warning btn-sm" onclick="editStudent(${sinhVien.Tt})">Sửa</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteStudent(${sinhVien.Tt})">Xóa</button>
+                                </td>
+                                `;
             sinhVienListSort.appendChild(sinhVienItem);
+        });
+    }
+
+    // Gọi qua API để sắp xếp
+    function oder(sort_field, sort_type) {
+        // // Sử dụng Fetch để gọi API
+        // fetch(`/api/student/sort?sortBy=${sort_field}&order=${sort_type}`)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         reload(data);
+        //     })
+        //     .catch(error => {
+        //         console.error('Error sorting students:', error);
+        //     });
+
+        // Sử dụng jQuery để gọi API
+        $.ajax({
+            url: '/api/student/sort',
+            type: 'GET',
+            data: { sortBy: sort_field, order: sort_type },
+            success: function(data) {
+                var dssv = JSON.parse(data);
+                reload(dssv);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error sorting students:', error);
+            }
         });
     }
 </script>
